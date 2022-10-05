@@ -7,12 +7,13 @@ const App = () => {
         <div>
             <ul>
                 {
-                    todolist.map(it => <li>{it.title} / {it.content}</li>)
+                    todolist.map((it, idx) => <li key={idx}>{it.title}  / {it.content}</li>)
                 }
             </ul>
-            <input onChange={e => setTodo({ ...todo, [e.target.name]: e.target.value })} name="title" />
-            <input onChange={e => setTodo({ ...todo, [e.target.name]: e.target.value })} name="content" />
+            <input onChange={e => setTodo({ ...todo, [e.target.name]: e.target.value })} name='title' />
+            <input onChange={e => setTodo({ ...todo, [e.target.name]: e.target.value })} name='content' />
             <button onClick={() => setTodolist([...todolist, todo])}>WRITE</button>
+            {console.log(todo)}
         </div>
     )
 }

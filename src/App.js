@@ -1,67 +1,84 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
+import { Link, NavLink, Route, Routes } from 'react-router-dom';
+import TodoList from './TodoList';
+import TodoWrite from './TodoWrite';
+
 
 const App = () => {
-    const [todo, setTodo] = useState({});
-    const [todolist, setTodolist] = useState([]);
-    const num = useRef(1)
-    const handlerInput = (e) => {
+
+    const [word, setWord] = useState({});
+    const [list, setList] = useState([]);
+
+    const num = useRef(1);
+    const inputTtitle = useRef(null)
+    const inputContent = useRef(null)
+
+    const handlerWord = (e) => {
         const { name, value } = e.target;
-        setTodo({
-            ...todo,
+        setWord({
+            ...word,
             [name]: value,
-            id: num.current,
-            done: false,
+            id: num.current
         })
     }
-
     const handlerList = () => {
-        if (todo.title.length < 5) {
-            alert('5자 이상 입력해주세요')
+        if (!word.title || !word.content) {
+            alert('내용을 입력해주세요');
             return
         }
-        setTodolist([...todolist, todo]);
-        setTodo({
+        if (word.title.length < 5) {
+            alert('더입력해');
+            // 1. 입력창을 비운다. , 2. 그 입력창에 포커스를 준다
+            setWord({
+                ...word,
+                title: "",
+            });
+            inputTtitle.current.focus();
+            return
+        }
+        const hg = /^[ㄱ-ㅎ가-힣]*$/;
+        if (!hg.test(word.title)) {
+            alert('한글만 입력해주세요...');
+            setWord({
+                ...word,
+                title: "",
+            });
+            inputTtitle.current.focus();
+            return
+        }
+        if (word.content.length < 5) {
+            alert('더입력해');
+            // 1. 입력창을 비운다. , 2. 그 입력창에 포커스를 준다.
+            setWord({
+                ...word,
+                content: "",
+            });
+            inputContent.current.focus();
+            return
+        }
+        setList([...list, word]);
+        setWord({
             title: "",
             content: "",
-        });
-
+        })
         num.current++
     }
-
-
-    const handlerDelete = (id) => {
-        setTodolist(todolist.filter(it => id !== it.id))
-    }
-
-    const handlerModify = (id) => {
-        console.log(id);
-        setTodolist(todolist.map(it => (
-            id === it.id
-                ? {
-                    ...it,
-                    done: !it.done
-                }
-                : it
-
-        )))
-    }
-
     return (
         <div>
-            <ul>
-                {
-                    todolist.map((it, idx) => <li key={it.id} className={it.done ? 'on' : ''}>
-                        <input type='checkbox' onChange={() => handlerModify(it.id)} />
-                        {it.id} {it.title}  / {it.content}
-                        <button onClick={() => handlerDelete(it.id)}>삭제</button>
-                        {console.log(it.done)}
-                    </li>)
-                }
-            </ul>
-            <input onChange={handlerInput} name='title' value={todo.title || ''} />
-            <input onChange={handlerInput} name='content' value={todo.content || ''} />
-            <button onClick={handlerList}>WRITE</button>
-            {console.log(todo, num.current)}
+            <nav>
+                <NavLink to='/'>home</NavLink>
+                <NavLink to='/Board'>Board</NavLink>
+                <NavLink to='/Write'>Write</NavLink>
+            </nav>
+            <Routes>
+                <Route path='/' element={<TodoList list={list} />} />
+                <Route path='/Board' element={<TodoList list={list} />} />
+                <Route path='/Write' element={<TodoWrite list={list} word={word} handlerWord={handlerWord} handlerList={handlerList} inputTtitle={inputTtitle} inputContent={inputContent} />} />
+            </Routes>
+
+
+
+
         </div>
     )
 }
