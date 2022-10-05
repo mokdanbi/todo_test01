@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Link, NavLink, Route, Routes } from 'react-router-dom';
+import { Link, NavLink, Route, Routes, useNavigate } from 'react-router-dom';
 import TodoList from './TodoList';
 import TodoWrite from './TodoWrite';
 
@@ -11,7 +11,9 @@ const App = () => {
 
     const num = useRef(1);
     const inputTtitle = useRef(null)
-    const inputContent = useRef(null)
+    const inputContent = useRef(null);
+
+    const navi = useNavigate();
 
     const handlerWord = (e) => {
         const { name, value } = e.target;
@@ -62,6 +64,7 @@ const App = () => {
             content: "",
         })
         num.current++
+        navi('/Board')
     }
     return (
         <div>
@@ -71,8 +74,8 @@ const App = () => {
                 <NavLink to='/Write'>Write</NavLink>
             </nav>
             <Routes>
-                <Route path='/' element={<TodoList list={list} />} />
-                <Route path='/Board' element={<TodoList list={list} />} />
+                <Route path='/' element={<TodoList list={list} setList={setList} />} />
+                <Route path='/Board' element={<TodoList list={list} setList={setList} />} />
                 <Route path='/Write' element={<TodoWrite list={list} word={word} handlerWord={handlerWord} handlerList={handlerList} inputTtitle={inputTtitle} inputContent={inputContent} />} />
             </Routes>
 
