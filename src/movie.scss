@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #f7f7f7;
+}
+
+img {
+    vertical-align: middle;
+    max-width: 100%;
+}
+
+
+.Movie {
+    background: #333;
+    color: #f7f7f7;
+
+    .inner {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 50px;
+        width: 1200px;
+        margin: 0 auto;
+
+        .desc {
+            min-height: 100px;
+            padding: 20px 0 0 0;
+
+        }
+    }
+}
